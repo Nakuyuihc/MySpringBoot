@@ -1,5 +1,6 @@
 package com.example.demo.test;
 
+import com.example.demo.producer.MessageProducer;
 import com.example.demo.test.entity.TestEntity;
 import com.example.demo.test.mapper.TestMapper;
 import com.example.demo.test.service.TestService;
@@ -16,6 +17,9 @@ public class HelloWorldController {
     @Autowired
     private TestService testService;
 
+    @Autowired
+    private MessageProducer messageProducer;
+
     @RequestMapping("/test")
     public String sayHello() {
         return "Hello Wolrd!Hello Wolrd!Hello Wolrd!";
@@ -24,6 +28,14 @@ public class HelloWorldController {
     @RequestMapping("/query/all")
     public List<TestEntity> queryUserAll(){
         return testService.queryAll();
+    }
+
+    @RequestMapping(value = "/index")
+    public String index(String str) {
+        str="消息";
+        // 将实体实例写入消息队列
+        messageProducer.sendMessage(str);
+        return "Success";
     }
 
 }
